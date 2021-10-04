@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -31,8 +32,10 @@ class ItemController extends Controller
         $product = null;
         $url = null;
         $sizes = null;
+        $clients = null;
 
         if($request->has('url')){
+
 
             $url = env('URL_SERVICE');
             $path = $url.'/get_product';
@@ -47,9 +50,13 @@ class ItemController extends Controller
 
             $sizes = $sizes->pluck('attr_value', 'attr_value');
 
+            $clients = User::doesntHave('roles')->get()->pluck('name', 'id');
+
+            #$product['price'] = filter_var($product['price'], FILTER_SANITIZE_NUMBER_INT);
+
         }
 
-        $context = compact('order', 'product', 'url', 'sizes');
+        $context = compact('order', 'product', 'url', 'sizes', 'clients');
         return view('dashboard.items.create', $context);
     }
 
@@ -59,9 +66,24 @@ class ItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Order $order)
     {
-        //
+
+        $request['price'] = filter_var($request['price'], FILTER_SANITIZE_NUMBER_INT);
+
+        if($request->credit){
+            $attemps = $request->price * 0.05;
+            $request['attemps'] = $attemps / 2;
+        }
+
+        $order->items()->create($request->all());
+
+        $order->update([
+            'total'=>$order->items->sum('price')
+        ]);
+
+        return redirect()->route('orders.show', $order);
+
     }
 
     /**

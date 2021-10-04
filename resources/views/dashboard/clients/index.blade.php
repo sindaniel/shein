@@ -1,9 +1,8 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<h2 class="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
-    <span>Orden #{{ $order->id }}  </span>
-    <span>${{ number_format($order->total) }}</span>
+<h2 class="font-semibold text-xl text-gray-800 leading-tight">
+    Ordenes
 </h2>
 @endsection
 
@@ -14,7 +13,7 @@
     
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class='flex justify-end mb-2'>
-            <a href="{{ route('orders.items.create',$order) }}" class='bg-green-400 hover:bg-green-700 text-white rounded px-2 py-2'>Agregar producto</a>
+            <a href="{{ route('clients.create') }}" class='bg-green-400 hover:bg-green-700 text-white rounded px-2 py-2'>Nuevo cliente</a>
         </div>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class=" bg-white border-b border-gray-200">
@@ -24,42 +23,35 @@
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 text-left">Producto</th>
-                                <th class="py-3 px-6 text-left">Total</th>
-                                <th class="py-3 px-6 text-left">Cliente</th>
-                                <th class="py-3 px-6 text-center">Credito</th>
-                              
+                                <th class="py-3 px-6 text-left">Nombre</th>
+                                <th class="py-3 px-6 text-left">Email</th>
+                                <th class="py-3 px-6 text-left">Teléfono</th>
+                                <th class="py-3 px-6 text-center">Ordenes</th>
                                 <th class="py-3 px-6 text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
-                            @foreach ($order->items as $item)
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            @foreach ($clients as $client)
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                
                                     <td class="py-3 px-6 text-left whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div class="mr-2">
-                                                <img src="{{ $item->thumb }}" class="w-10">
-                                            </div>
-                                            <span class="font-medium">{{ $item->name }}</span>
+                                            <span class="font-medium">{{ $client->name }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">
-                                        ${{ number_format($item->price) }}
+                                    <td class="py-3 px-6 text-left whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <span class="font-medium">{{ $client->email }}</span>
+                                        </div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">
-                                        {{ $item->user->name }}
+                                    <td class="py-3 px-6 text-left whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <span class="font-medium">{{ $client->phone }}</span>
+                                        </div>
                                     </td>
+                                   
                                     <td class="py-3 px-6 text-center">
-                                        
-                                        @if ($item->credit)
-                                            <div class='flex flex-col'>
-                                                <span>Si</span>
-                                                <span class='text-gray-400'>${{ number_format($item->attemps) }}</span>
-                                            </div>
-
-                                        @else
-                                            <span class="bg-purple-200 text-indigo-600 py-1 px-3 rounded-full text-xs">No</span>
-                                        @endif
+                                        <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">0</span>
                                     </td>
                                     <td class="py-3 px-6 text-center">
                                         <div class="flex item-center justify-center">
@@ -81,7 +73,8 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>
+                                
+                            </tr>
                             @endforeach
                            
                         </tbody>

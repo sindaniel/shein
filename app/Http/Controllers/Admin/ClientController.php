@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::orderBy('id')->paginate();
-
-        $context = compact('orders');
-        return view('dashboard.orders.index', $context);
+        $clients = User::doesntHave('roles')->get();
+        $context = compact('clients');
+        
+        return view('dashboard.clients.index', $context);
     }
 
     /**
@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('dashboard.orders.create');
+        return view('dashboard.clients.create');
     }
 
     /**
@@ -40,13 +40,14 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'date' => 'required|date|unique:orders'
+            'name'=>'required|max:255',
+            'phone'=>'required|numeric|digits:10',
+            'email' => 'required|email|unique:users'
         ]);
+        $request['password'] = '12345678';
+        User::create($request->all());
 
-        $order = Order::create($request->all());
-
-        return redirect()->route('orders.show', $order)->with('Orden creada');
-
+        return redirect()->route('clients.index');
     }
 
     /**
@@ -55,11 +56,9 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
-    {   
-        $order->load('items.user');
-        $context = compact('order');
-        return view('dashboard.orders.show', $context);
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -95,7 +94,4 @@ class OrderController extends Controller
     {
         //
     }
-
-
-   
 }

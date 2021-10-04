@@ -8,5 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
-    protected $fillable = ['order_id', 'value', 'user_id', 'quantity'];
+    protected $fillable = [
+        'order_id', 
+        'price', 
+        'name',
+        'thumb',
+        'user_id', 
+        'quantity', 
+        'size', 
+        'credit', 
+        'attemps', 
+        'url'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

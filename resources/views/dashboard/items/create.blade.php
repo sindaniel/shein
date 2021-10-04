@@ -52,11 +52,11 @@
                   
                     {{ Aire::input('name', 'Nombre del producto')->value( $product['name']) }}
                     {{ Aire::input('price', 'Precio')->readonly()->value( $product['price'])->addClass('bg-gray-100') }}
-
                     {{ Aire::select($sizes, 'size', 'Talla'); }}
-
-                    {{ Aire::select(['No', 'Si'], 'credit', 'Crédito'); }}
+                    {{ Aire::select($clients, 'user_id', 'Cliente'); }}    
+                    {{ Aire::select(['No', 'Si'], 'credit', 'Crédito')->value(1); }}
                     {{ Aire::hidden('url')->value($url) }}
+                    {{ Aire::hidden('thumb')->value($product['thumb']) }}
                     {{ Aire::submit('Consultar') }}
                         
                 {{ Aire::close() }}

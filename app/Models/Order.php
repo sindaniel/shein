@@ -11,4 +11,11 @@ class Order extends Model
     protected $fillable = ['date', 'total'];
 
     protected $casts = ['date'=> 'datetime'];
+
+    public function items(){
+        return $this->hasMany(Item::class);
+    }
+
+    
+
 }
