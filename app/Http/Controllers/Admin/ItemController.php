@@ -73,14 +73,12 @@ class ItemController extends Controller
 
         if($request->credit){
             $attemps = $request->price * 0.05;
-            $request['attemps'] = $attemps / 2;
+            $request['attemps'] = $attemps;
         }
 
         $order->items()->create($request->all());
 
-        $order->update([
-            'total'=>$order->items->sum('price')
-        ]);
+        $order->update(['total'=>$order->items->sum('price')]);
 
         return redirect()->route('orders.show', $order);
 
@@ -126,8 +124,10 @@ class ItemController extends Controller
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Item $item)
+    public function destroy(Order $order, Item $item)
     {
-        //
+        $item->delete();
+        $order->update(['total'=>$order->items->sum('price')]);
+        return back()->with('Elemento eliminado');
     }
 }
