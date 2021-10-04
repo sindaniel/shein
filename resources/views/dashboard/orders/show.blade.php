@@ -14,7 +14,7 @@
     
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class='flex justify-end mb-2'>
-            <a href="{{ route('orders.create') }}" class='bg-green-400 hover:bg-green-700 text-white rounded px-2 py-2'>Orden {{ $order->date }}</a>
+            <a href="{{ route('orders.items.create',$order) }}" class='bg-green-400 hover:bg-green-700 text-white rounded px-2 py-2'>Agregar producto</a>
         </div>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class=" bg-white border-b border-gray-200">
