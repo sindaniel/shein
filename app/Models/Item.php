@@ -17,7 +17,7 @@ class Item extends Model
         'quantity', 
         'size', 
         'credit', 
-        'attemps', 
+        'attempts', 
         'url'];
 
     public function user(){

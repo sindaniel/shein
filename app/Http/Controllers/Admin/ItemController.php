@@ -72,13 +72,16 @@ class ItemController extends Controller
         $request['price'] = filter_var($request['price'], FILTER_SANITIZE_NUMBER_INT);
 
         if($request->credit){
-            $attemps = $request->price * 0.05;
-            $request['attemps'] = $attemps;
+            $attempts = $request->price * 0.05;
+            $request['attempts'] = $attempts;
         }
 
         $order->items()->create($request->all());
 
-        $order->update(['total'=>$order->items->sum('price')]);
+        $order->update([
+            'total'=>$order->items->sum('price'),
+            'profit'=>$order->items->sum('attempts')
+        ]);
 
         return redirect()->route('orders.show', $order);
 
@@ -127,7 +130,10 @@ class ItemController extends Controller
     public function destroy(Order $order, Item $item)
     {
         $item->delete();
-        $order->update(['total'=>$order->items->sum('price')]);
+        $order->update([
+            'total'=>$order->items->sum('price'),
+            'profit'=>$order->items->sum('attempts')
+        ]);
         return back()->with('Elemento eliminado');
     }
 }

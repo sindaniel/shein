@@ -3,7 +3,10 @@
 @section('header')
 <h2 class="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
     <span>Orden #{{ $order->id }}  </span>
-    <span>${{ number_format($order->total) }}</span>
+    <div class='flex flex-col text-right'>
+        <span>${{ number_format($order->total) }}</span>
+        <span class='text-sm text-green-600'>${{ number_format($order->profit) }}</span>
+    </div>
 </h2>
 @endsection
 
@@ -43,8 +46,12 @@
                                             <span class="font-medium">{{ $item->name }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">
-                                        ${{ number_format($item->price) }}
+                                    <td  class="py-3 px-6 flex flex-col justify-center">
+                                        <strong>${{ number_format($item->price) }}</strong>
+                                        @if ($item->attempts)
+                                        <span class='text-sm text-green-600'>${{ number_format($item->attempts) }}</span>
+                                        @endif
+                                       
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         {{ $item->user->name }}
@@ -54,7 +61,7 @@
                                         @if ($item->credit)
                                             <div class='flex flex-col'>
                                                 <span>Si</span>
-                                                <span class='text-gray-400'>${{ number_format(($item->attemps/2) + ($item->price/2)) }}</span>
+                                                <span class='text-gray-400'>${{ number_format(($item->attempts/2) + ($item->price/2)) }}</span>
                                             </div>
 
                                         @else
